@@ -1,7 +1,7 @@
 using System.Threading.Tasks;
-using AstronomyApp.Data.Weather;
+using SkyApp.Data.Weather;
 
-namespace AstronomyApp.Web;
+namespace SkyApp.Web;
 
 public interface WeatherApiInterface
 {

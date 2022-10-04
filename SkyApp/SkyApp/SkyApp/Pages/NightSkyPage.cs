@@ -1,6 +1,6 @@
 using Xamarin.Forms;
 
-namespace AstronomyApp.Pages;
+namespace SkyApp.Pages;
 
 public class NightSkyPage: ContentPage
 {

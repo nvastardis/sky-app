@@ -1,9 +1,9 @@
 using System;
 using System.Collections.Generic;
-using AstronomyApp.Data;
+using SkyApp.Data;
 using Xamarin.Forms;
 
-namespace AstronomyApp.Pages;
+namespace SkyApp.Pages;
 
 public class FlyOutMenuPage : ContentPage
 {

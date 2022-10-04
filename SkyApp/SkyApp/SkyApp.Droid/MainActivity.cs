@@ -2,7 +2,7 @@
 using Android.Content.PM;
 using Android.OS;
 
-namespace AstronomyApp.Droid;
+namespace SkyApp.Droid;
 
 [Activity(Label = "SkyApp", Theme = "@style/MainTheme", MainLauncher = true,
     ConfigurationChanges = ConfigChanges.ScreenSize | ConfigChanges.Orientation)]

@@ -6,7 +6,7 @@
         <ProjectGuid>{D1329DD4-A24B-428D-83F4-A5A279A58DE0}</ProjectGuid>
         <ProjectTypeGuids>{EFBA0AD7-5A72-4C68-AF49-83D382785DCF};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
         <OutputType>Library</OutputType>
-        <RootNamespace>AstronomyApp.Droid</RootNamespace>
+        <RootNamespace>SkyApp.Droid</RootNamespace>
         <AssemblyName>SkyApp.Droid</AssemblyName>
         <AndroidApplication>True</AndroidApplication>
         <AndroidResgenFile>Resources\Resource.designer.cs</AndroidResgenFile>

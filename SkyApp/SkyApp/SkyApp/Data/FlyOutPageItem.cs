@@ -1,6 +1,6 @@
 using System;
 
-namespace AstronomyApp.Data;
+namespace SkyApp.Data;
 
 public class FlyOutPageItem
 {

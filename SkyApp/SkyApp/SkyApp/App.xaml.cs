@@ -4,7 +4,7 @@ using Xamarin.Forms.Xaml;
 
 [assembly: XamlCompilation(XamlCompilationOptions.Compile)]
 
-namespace AstronomyApp
+namespace SkyApp
 {
     public partial class App : Application
     {

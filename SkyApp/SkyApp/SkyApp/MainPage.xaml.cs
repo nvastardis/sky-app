@@ -1,9 +1,9 @@
 ﻿using System;
-using AstronomyApp.Data;
-using AstronomyApp.Pages;
+using SkyApp.Data;
+using SkyApp.Pages;
 using Xamarin.Forms;
 
-namespace AstronomyApp;
+namespace SkyApp;
 public partial class MainPage : FlyoutPage
 {
     private readonly FlyOutMenuPage _flyoutMenuPage;

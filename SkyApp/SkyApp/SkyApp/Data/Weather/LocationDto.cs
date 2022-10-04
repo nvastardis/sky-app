@@ -1,4 +1,4 @@
-namespace AstronomyApp.Data.Weather;
+namespace SkyApp.Data.Weather;
 
 public class LocationDto
 {
