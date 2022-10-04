@@ -4,7 +4,7 @@ using Android.OS;
 
 namespace AstronomyApp.Droid;
 
-[Activity(Label = "AstronomyApp", Theme = "@style/MainTheme", MainLauncher = true,
+[Activity(Label = "SkyApp", Theme = "@style/MainTheme", MainLauncher = true,
     ConfigurationChanges = ConfigChanges.ScreenSize | ConfigChanges.Orientation)]
 public class MainActivity : global::Xamarin.Forms.Platform.Android.FormsAppCompatActivity
 {

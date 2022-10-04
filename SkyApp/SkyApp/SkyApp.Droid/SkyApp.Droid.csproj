@@ -7,7 +7,7 @@
         <ProjectTypeGuids>{EFBA0AD7-5A72-4C68-AF49-83D382785DCF};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
         <OutputType>Library</OutputType>
         <RootNamespace>AstronomyApp.Droid</RootNamespace>
-        <AssemblyName>AstronomyApp.Droid</AssemblyName>
+        <AssemblyName>SkyApp.Droid</AssemblyName>
         <AndroidApplication>True</AndroidApplication>
         <AndroidResgenFile>Resources\Resource.designer.cs</AndroidResgenFile>
         <AndroidResgenClass>Resource</AndroidResgenClass>
@@ -66,9 +66,9 @@
         <AndroidResource Include="Resources\values\colors.xml" />
     </ItemGroup>
     <ItemGroup>
-        <ProjectReference Include="..\AstronomyApp\AstronomyApp.csproj">
-            <Project>{8DE44888-D163-427E-835E-F0E5BB03C020}</Project>
-            <Name>AstronomyApp</Name>
+        <ProjectReference Include="..\SkyApp\SkyApp.csproj">
+            <Project>{592a930d-1014-4d16-9010-0ce5805b983e}</Project>
+            <Name>SkyApp</Name>
         </ProjectReference>
     </ItemGroup>
     <Import Project="$(MSBuildExtensionsPath)\Xamarin\Android\Xamarin.Android.CSharp.targets" />
