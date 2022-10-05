@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using SkyApp.Data;
 using Xamarin.Forms;
@@ -23,13 +22,13 @@ public class FlyOutMenuPage : ContentPage
         flyoutPageItems.Add(new()
         {
             Title = "Night Sky",
-            IconSource = "todo.png",
+            IconSource = "",
             TargetType = typeof(NightSkyPage)
         });
         flyoutPageItems.Add(new ()
         {
             Title = "Moon",
-            IconSource = "reminders.png",
+            IconSource = "",
             TargetType = typeof(MoonPage)
         });
 
@@ -41,16 +40,18 @@ public class FlyOutMenuPage : ContentPage
                 Grid grid = new() { Padding = new Thickness(5, 10) };
                 grid.ColumnDefinitions.Add(new() { Width = new GridLength(30) });
                 grid.ColumnDefinitions.Add(new() { Width = GridLength.Star });
-
-                // var image = new Image();
-                // image.SetBinding(Image.SourceProperty, "IconSource");
+                
                 Label label = new() { VerticalOptions = LayoutOptions.FillAndExpand };
                 label.SetBinding(Label.TextProperty, "Title");
-
-                // grid.Children.Add(image);
+                
                 grid.Children.Add(label, 1, 0);
 
-                return new ViewCell { View = grid };
+                ViewCell cell = new ()
+                {
+                    View = grid
+                };
+                
+                return cell;
             }),
             SeparatorVisibility = SeparatorVisibility.None
         };

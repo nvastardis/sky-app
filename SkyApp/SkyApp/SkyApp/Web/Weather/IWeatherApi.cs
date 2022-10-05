@@ -1,9 +1,9 @@
 using System.Threading.Tasks;
 using SkyApp.Data.Weather;
 
-namespace SkyApp.Web;
+namespace SkyApp.Web.Weather;
 
-public interface WeatherApiInterface
+public interface IWeatherApi
 {
     Task<WeatherDto> GetWeather();
     Task<WeatherDto> GetWeather(string location);
