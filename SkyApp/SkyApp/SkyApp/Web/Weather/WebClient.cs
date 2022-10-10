@@ -11,46 +11,56 @@ public class WebClient:
     IWeatherApi
 {
     private readonly HttpClient _client;
-    private readonly LocationFinder geoLocator;
+    private readonly LocationFinder _geoLocator;
     private readonly string _apiBaseUrl = "https://weatherapi-com.p.rapidapi.com/current.json?";
+
     public WebClient()
     {
         _client = new();
         _client.DefaultRequestHeaders.Add("X-RapidAPI-Key", "Test");
         _client.DefaultRequestHeaders.Add("X-RapidAPI-Host", "weatherapi-com.p.rapidapi.com");
-        geoLocator = new ();
+        _geoLocator = new();
     }
-
-
-    public async Task<WeatherDto> GetWeather()
+    
+    
+    public async Task<WeatherDto> GetWeather(string location = null)
     {
-        var currentLocation = await geoLocator.GetCurrentLocationAsync();
+        var locationParameters = await SetQueryParametersViaGeoLocator(location);
 
-        if (currentLocation is not null)
+        if (locationParameters is null)
         {
-            var queryParameters =
-                $"q={currentLocation.Latitude.ToString(CultureInfo.InvariantCulture)},{currentLocation.Longitude.ToString(CultureInfo.InvariantCulture)}";
-            using HttpRequestMessage request = new()
-            {
-                Method = HttpMethod.Get,
-                RequestUri = new($"{_apiBaseUrl}{queryParameters}")
-            };
-            using (var response = await _client.SendAsync(request))
-            {
-                response.EnsureSuccessStatusCode();
-                var body = await response.Content.ReadAsStreamAsync();
-                var result = await JsonSerializer.DeserializeAsync<WeatherDto>(body);
-                return result;
-            }
-
+            return new();
         }
- 
-
-        return null;
+        
+        using HttpRequestMessage request = new()
+        {
+            Method = HttpMethod.Get,
+            RequestUri = new($"{_apiBaseUrl}{locationParameters}")
+        };
+        using var response = await _client.SendAsync(request);
+        response.EnsureSuccessStatusCode();
+        var body = await response.Content.ReadAsStreamAsync();
+        var result = await JsonSerializer.DeserializeAsync<WeatherDto>(body);
+        return result;
     }
-
-    public async Task<WeatherDto> GetWeather(string location)
+    
+    private async Task<string> SetQueryParametersViaGeoLocator(string location = null)
     {
-        throw new System.NotImplementedException();
+        var query = "q=";
+        if (location is not null)
+        {
+            return $"{query}{location}";
+        }
+        var currentLocation = await _geoLocator.GetCurrentLocationAsync();
+        
+        if (currentLocation is null)
+        {
+            return null;
+        }
+
+        var locationParams =
+            $"{currentLocation.Latitude.ToString(CultureInfo.InvariantCulture)},{currentLocation.Longitude.ToString(CultureInfo.InvariantCulture)}";
+        
+        return $"{query}{locationParams}";
     }
 }

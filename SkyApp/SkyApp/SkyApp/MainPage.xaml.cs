@@ -16,7 +16,7 @@ public partial class MainPage : FlyoutPage
         InitializeComponent();
     }
     
-    void OnItemSelected(object sender, SelectedItemChangedEventArgs e)
+    private void OnItemSelected(object sender, SelectedItemChangedEventArgs e)
     {
         if (e.SelectedItem is not FlyOutPageItem item) return;
         Detail = new NavigationPage((Page)Activator.CreateInstance(item.TargetType));
