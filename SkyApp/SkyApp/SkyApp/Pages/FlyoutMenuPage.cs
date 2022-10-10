@@ -8,7 +8,10 @@ public class FlyOutMenuPage : ContentPage
 {
 
     private readonly ListView listView;
-    public ListView ListView => listView;
+    public ListView ItemList
+    {
+        get { return listView; }
+    }
 
     public FlyOutMenuPage()
     {

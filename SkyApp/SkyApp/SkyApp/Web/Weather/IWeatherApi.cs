@@ -5,5 +5,5 @@ namespace SkyApp.Web.Weather;
 
 public interface IWeatherApi
 {
-    Task<WeatherDto> GetWeather(string location = null);
+    Task<WeatherApiResponse> GetWeather(string location = null);
 }

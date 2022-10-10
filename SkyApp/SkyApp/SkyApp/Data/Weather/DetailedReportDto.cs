@@ -2,7 +2,7 @@ using System;
 
 namespace SkyApp.Data.Weather;
 
-public class WeatherReportDto
+public class DetailedReportDto
 {
     public DateTime Last_updated { get; set; }
     public double Temp_c { get; set; }

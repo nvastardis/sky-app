@@ -1,8 +1,11 @@
+using System;
+using System.Diagnostics;
 using System.Text.Json;
 using System.Globalization;
 using System.Net.Http;
+using System.Threading;
 using System.Threading.Tasks;
-using SkyApp.Data;
+using SkyApp.Data.LocationFinder;
 using SkyApp.Data.Weather;
 
 namespace SkyApp.Web.Weather;
@@ -11,56 +14,77 @@ public class WebClient:
     IWeatherApi
 {
     private readonly HttpClient _client;
-    private readonly LocationFinder _geoLocator;
+    private readonly ILocationFinder _geoLocator;
     private readonly string _apiBaseUrl = "https://weatherapi-com.p.rapidapi.com/current.json?";
 
-    public WebClient()
+    public WebClient(ILocationFinder geoLocator)
     {
         _client = new();
         _client.DefaultRequestHeaders.Add("X-RapidAPI-Key", "Test");
         _client.DefaultRequestHeaders.Add("X-RapidAPI-Host", "weatherapi-com.p.rapidapi.com");
-        _geoLocator = new();
+        _geoLocator = geoLocator;
     }
     
     
-    public async Task<WeatherDto> GetWeather(string location = null)
+    public async Task<WeatherApiResponse> GetWeather(string location = null)
     {
-        var locationParameters = await SetQueryParametersViaGeoLocator(location);
+        
+        var queryParameters = await SetQueryParametersViaGeoLocator(location);
+        var result = new WeatherApiResponse();
 
-        if (locationParameters is null)
+        if (queryParameters.locationStatus != LocationFinderStatus.Success)
         {
-            return new();
+            result.Weather = null;
+            switch (queryParameters.locationStatus)
+            {
+                case LocationFinderStatus.PermissionException:
+                    result.Status = WeatherApiResponseStatus.ErrorFindingLocationPermission;
+                    break;
+                case LocationFinderStatus.FeatureNotEnabledException:
+                    result.Status = WeatherApiResponseStatus.ErrorFindingLocationFeatureNotEnabled;
+                    break;
+                case LocationFinderStatus.FeatureNotSupportedException:
+                    result.Status = WeatherApiResponseStatus.ErrorFindingLocationFeatureNotSupported;
+                    break;
+                default:
+                    result.Status = WeatherApiResponseStatus.Undefined;
+                    break;
+            }
+
+            return result;
+
         }
         
         using HttpRequestMessage request = new()
         {
             Method = HttpMethod.Get,
-            RequestUri = new($"{_apiBaseUrl}{locationParameters}")
+            RequestUri = new($"{_apiBaseUrl}{queryParameters.locationParameter}")
         };
         using var response = await _client.SendAsync(request);
         response.EnsureSuccessStatusCode();
         var body = await response.Content.ReadAsStreamAsync();
-        var result = await JsonSerializer.DeserializeAsync<WeatherDto>(body);
+        result.Weather = await JsonSerializer.DeserializeAsync<WeatherDto>(body);
+        result.Status = WeatherApiResponseStatus.Success;
         return result;
     }
     
-    private async Task<string> SetQueryParametersViaGeoLocator(string location = null)
+    private async Task<(string locationParameter,  LocationFinderStatus locationStatus)> SetQueryParametersViaGeoLocator(string location = null)
     {
         var query = "q=";
         if (location is not null)
         {
-            return $"{query}{location}";
+            return ($"{query}{location}", LocationFinderStatus.Success);
         }
-        var currentLocation = await _geoLocator.GetCurrentLocationAsync();
         
-        if (currentLocation is null)
+        var currentLocation = await _geoLocator.GetCurrentLocationAsync();
+        if (currentLocation.LocationFound is null)
         {
-            return null;
+            return (null, currentLocation.ResponseStatus);
         }
 
         var locationParams =
-            $"{currentLocation.Latitude.ToString(CultureInfo.InvariantCulture)},{currentLocation.Longitude.ToString(CultureInfo.InvariantCulture)}";
+            $"{currentLocation.LocationFound.Latitude.ToString(CultureInfo.InvariantCulture)},{currentLocation.LocationFound.Longitude.ToString(CultureInfo.InvariantCulture)}";
         
-        return $"{query}{locationParams}";
+        return ($"{query}{locationParams}", LocationFinderStatus.Success);
     }
 }

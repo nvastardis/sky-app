@@ -1,6 +1,6 @@
 namespace SkyApp.Data.Weather;
 
-public class LocationDto
+public class LocationResponseDto
 {
     public string Name { get; set; }
     public string Region { get; set; }

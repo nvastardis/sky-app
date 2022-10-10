@@ -2,6 +2,6 @@ namespace SkyApp.Data.Weather;
 
 public class WeatherDto
 {
-    public LocationDto Location { get; set; }
-    public WeatherReportDto Current { get; set; }
+    public LocationResponseDto Location { get; set; }
+    public DetailedReportDto Current { get; set; }
 }
