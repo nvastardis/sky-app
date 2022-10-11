@@ -2,8 +2,7 @@ namespace SkyApp.Data.Weather;
 
 public class ConditionsDto
 {
-
-    public string Description { get; set; }
-    public string Icon { get; set; }
-    public int Code { get; set; }
+    public string text { get; set; }
+    public string icon { get; set; }
+    public int code { get; set; }
 }

@@ -2,7 +2,9 @@ using System;
 using System.Diagnostics;
 using System.Text.Json;
 using System.Globalization;
+using System.IO;
 using System.Net.Http;
+using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using SkyApp.Data.LocationFinder;
@@ -62,8 +64,9 @@ public class WebClient:
         };
         using var response = await _client.SendAsync(request);
         response.EnsureSuccessStatusCode();
-        var body = await response.Content.ReadAsStreamAsync();
-        result.Weather = await JsonSerializer.DeserializeAsync<WeatherDto>(body);
+        var body = await response.Content.ReadAsStringAsync();
+        var bodyStream = new MemoryStream(Encoding.UTF8.GetBytes(body));
+        result.Weather = await JsonSerializer.DeserializeAsync<WeatherDto>(bodyStream);
         result.Status = WeatherApiResponseStatus.Success;
         return result;
     }

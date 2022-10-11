@@ -1,13 +1,16 @@
+using System;
+using System.Text.Json.Serialization;
+
 namespace SkyApp.Data.Weather;
 
 public class LocationResponseDto
 {
-    public string Name { get; set; }
-    public string Region { get; set; }
-    public string Country { get; set; }
-    public string Lat { get; set; }
-    public string Lon { get; set; }
-    public string Tz_id { get; set; }
-    public string Localtime_epoch { get; set; }
-    public string Localtime { get; set; }
+    public string name { get; set; }
+    public string region { get; set; }
+    public string country { get; set; }
+    public double lat { get; set; }
+    public double lon { get; set; }
+    public string tz_id { get; set; }
+    public int localtime_epoch { get; set; }
+    public string localtime { get; set; }
 }
