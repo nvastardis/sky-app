@@ -5,9 +5,8 @@ using System.Globalization;
 using System.IO;
 using System.Net.Http;
 using System.Text;
-using System.Threading;
 using System.Threading.Tasks;
-using SkyApp.Data.LocationFinder;
+using SkyApp.Data.GeoLocation;
 using SkyApp.Data.Weather;
 
 namespace SkyApp.Web.Weather;
@@ -16,10 +15,10 @@ public class WebClient:
     IWeatherApi
 {
     private readonly HttpClient _client;
-    private readonly ILocationFinder _geoLocator;
+    private readonly IGeoLocator _geoLocator;
     private readonly string _apiBaseUrl = "https://weatherapi-com.p.rapidapi.com/current.json?";
 
-    public WebClient(ILocationFinder geoLocator)
+    public WebClient(IGeoLocator geoLocator)
     {
         _client = new();
         _client.DefaultRequestHeaders.Add("X-RapidAPI-Key", "Test");
@@ -34,18 +33,18 @@ public class WebClient:
         var queryParameters = await SetQueryParametersViaGeoLocator(location);
         var result = new WeatherApiResponse();
 
-        if (queryParameters.locationStatus != LocationFinderStatus.Success)
+        if (queryParameters.locationStatus != GeoLocatorStatus.Success)
         {
             result.Weather = null;
             switch (queryParameters.locationStatus)
             {
-                case LocationFinderStatus.PermissionException:
+                case GeoLocatorStatus.PermissionException:
                     result.Status = WeatherApiResponseStatus.ErrorFindingLocationPermission;
                     break;
-                case LocationFinderStatus.FeatureNotEnabledException:
+                case GeoLocatorStatus.FeatureNotEnabledException:
                     result.Status = WeatherApiResponseStatus.ErrorFindingLocationFeatureNotEnabled;
                     break;
-                case LocationFinderStatus.FeatureNotSupportedException:
+                case GeoLocatorStatus.FeatureNotSupportedException:
                     result.Status = WeatherApiResponseStatus.ErrorFindingLocationFeatureNotSupported;
                     break;
                 default:
@@ -71,12 +70,12 @@ public class WebClient:
         return result;
     }
     
-    private async Task<(string locationParameter,  LocationFinderStatus locationStatus)> SetQueryParametersViaGeoLocator(string location = null)
+    private async Task<(string locationParameter,  GeoLocatorStatus locationStatus)> SetQueryParametersViaGeoLocator(string location = null)
     {
         var query = "q=";
         if (location is not null)
         {
-            return ($"{query}{location}", LocationFinderStatus.Success);
+            return ($"{query}{location}", GeoLocatorStatus.Success);
         }
         
         var currentLocation = await _geoLocator.GetCurrentLocationAsync();
@@ -88,6 +87,6 @@ public class WebClient:
         var locationParams =
             $"{currentLocation.LocationFound.Latitude.ToString(CultureInfo.InvariantCulture)},{currentLocation.LocationFound.Longitude.ToString(CultureInfo.InvariantCulture)}";
         
-        return ($"{query}{locationParams}", LocationFinderStatus.Success);
+        return ($"{query}{locationParams}", GeoLocatorStatus.Success);
     }
 }

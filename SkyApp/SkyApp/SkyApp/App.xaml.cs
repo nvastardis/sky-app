@@ -1,6 +1,6 @@
 ﻿using System;
 using Microsoft.Extensions.DependencyInjection;
-using SkyApp.Data.LocationFinder;
+using SkyApp.Data.GeoLocation;
 using SkyApp.Web.Weather;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
@@ -41,7 +41,7 @@ public partial class App : Application
         var services = new ServiceCollection();
 
         services.AddSingleton<IWeatherApi, WeatherWebClient>();
-        services.AddSingleton<ILocationFinder, LocationFinder>();
+        services.AddSingleton<IGeoLocator, GeoLocator>();
             
         ServiceProvider = services.BuildServiceProvider();
     }

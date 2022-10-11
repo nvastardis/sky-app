@@ -1,6 +1,6 @@
-namespace SkyApp.Data.LocationFinder;
+namespace SkyApp.Data.GeoLocation;
 
-public enum LocationFinderStatus
+public enum GeoLocatorStatus
 {
     Undefined = 0,
     FeatureNotSupportedException = 1,
