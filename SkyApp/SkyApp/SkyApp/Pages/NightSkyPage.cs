@@ -2,7 +2,6 @@ using Xamarin.Forms;
 
 namespace SkyApp.Pages;
 
-public class NightSkyPage: ContentPage
+public class NightSkyPage : ContentPage
 {
-    
 }

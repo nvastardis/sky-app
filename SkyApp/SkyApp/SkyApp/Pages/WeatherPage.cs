@@ -3,7 +3,7 @@ using Xamarin.Forms;
 
 namespace SkyApp.Pages;
 
-public class WeatherPage: ContentPage
+public class WeatherPage : ContentPage
 {
     private readonly IWeatherApi _weatherApi;
 
@@ -12,9 +12,9 @@ public class WeatherPage: ContentPage
         _weatherApi = api;
         InitAsync();
     }
-    
+
     private async void InitAsync()
-    { 
+    {
         var response = await _weatherApi.GetWeather();
         switch (response.Status)
         {

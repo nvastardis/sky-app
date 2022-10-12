@@ -13,16 +13,18 @@
 
     <ItemGroup>
         <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="7.0.0-rc.1.22426.10" />
+        <PackageReference Include="Microsoft.Extensions.Http" Version="6.0.0" />
+        <PackageReference Include="System.Net.Http.Json" Version="6.0.0" />
         <PackageReference Include="System.Text.Json" Version="7.0.0-rc.1.22426.10" />
         <PackageReference Include="Xamarin.Essentials" Version="1.7.3" />
         <PackageReference Include="Xamarin.Forms" Version="5.0.0.2515" />
     </ItemGroup>
 
     <ItemGroup>
-      <EmbeddedResource Remove="Pages\FlyoutMenuPage.xaml" />
+        <EmbeddedResource Remove="Pages\FlyoutMenuPage.xaml" />
     </ItemGroup>
 
     <ItemGroup>
-      <Compile Remove="Pages\FlyoutMenuPage.xaml.cs" />
+        <Compile Remove="Pages\FlyoutMenuPage.xaml.cs" />
     </ItemGroup>
 </Project>

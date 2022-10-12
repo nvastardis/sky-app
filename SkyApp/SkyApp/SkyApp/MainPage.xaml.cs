@@ -5,11 +5,12 @@ using SkyApp.Pages;
 using Xamarin.Forms;
 
 namespace SkyApp;
+
 public partial class MainPage : FlyoutPage
 {
     private readonly FlyOutMenuPage _flyoutMenuPage;
     private readonly IServiceProvider _provider;
-    
+
     public MainPage(IServiceProvider serviceProvider)
     {
         _provider = serviceProvider;
@@ -19,7 +20,7 @@ public partial class MainPage : FlyoutPage
         Detail = new NavigationPage(new());
         InitializeComponent();
     }
-    
+
     private void OnItemSelected(object sender, SelectedItemChangedEventArgs e)
     {
         if (e.SelectedItem is not FlyOutPageItem item) return;
