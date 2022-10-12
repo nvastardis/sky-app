@@ -2,6 +2,7 @@
 using Microsoft.Extensions.DependencyInjection;
 using SkyApp.Data.GeoLocation;
 using SkyApp.Web.Weather;
+using Xamarin.Essentials;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 
@@ -23,7 +24,7 @@ public partial class App : Application
 
     protected override void OnStart()
     {
-        // Handle when your app starts
+        Permissions.RequestAsync<Permissions.LocationWhenInUse>();
     }
 
     protected override void OnSleep()

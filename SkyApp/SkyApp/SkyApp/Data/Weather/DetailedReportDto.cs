@@ -1,30 +1,75 @@
 using System;
+using System.Text.Json.Serialization;
 
 namespace SkyApp.Data.Weather;
 
 public class DetailedReportDto
 {
-    public int last_updated_epoch { get; set; }
-    public string last_updated { get; set; }
-    public double temp_c { get; set; }
-    public double temp_f { get; set; }
-    public int is_day { get; set; }
-    public ConditionsDto condition { get; set; }
-    public double wind_mph { get; set; }
-    public double wind_kph { get; set; }
-    public int wind_degree { get; set; }
-    public string wind_dir { get; set; }
-    public double pressure_mb { get; set; }
-    public double pressure_in { get; set; }
-    public double precip_mm { get; set; }
-    public double precip_in { get; set; }
-    public int humidity { get; set; }
-    public int cloud { get; set; }
-    public double feelslike_c { get; set; }
-    public double feelslike_f { get; set; }
-    public double vis_km { get; set; }
-    public double vis_miles { get; set; }
-    public double uv { get; set; }
-    public double gust_mph { get; set; }
-    public double gust_kph { get; set; }
+
+    [JsonPropertyName("last_updated")]
+    public string LocalTimeOfLastUpdate { get; set; }
+    
+    [JsonPropertyName("temp_c")]
+    public double TemperatureInCelsius { get; set; }
+    
+    [JsonPropertyName("temp_f")]
+    public double TemperatureInFahrenheit { get; set; }
+    
+    [JsonPropertyName("is_day")]
+    public int IsDay { get; set; }
+    
+    [JsonPropertyName("condition")]
+    public ConditionsDto Conditions { get; set; }
+    
+    [JsonPropertyName("wind_mph")]
+    public double WindSpeedInMilesPerHour { get; set; }
+    
+    [JsonPropertyName("wind_kph")]
+    public double WindSpeedInKilometersPerHour { get; set; }
+    
+    [JsonPropertyName("wind_degree")]
+    public int WindDirectionInDegrees { get; set; }
+    
+    [JsonPropertyName("wind_dir")]
+    public string WindDirectionInCompass { get; set; }
+    
+    [JsonPropertyName("pressure_mb")]
+    public double PressureInMillibars { get; set; }
+    
+    [JsonPropertyName("pressure_in")]
+    public double PressureInInches { get; set; }
+    
+    [JsonPropertyName("precip_mm")]
+    public double PrecipitationInMillimeters { get; set; }
+    
+    [JsonPropertyName("precip_in")]
+    public double PrecipitationInInches { get; set; }
+    
+    [JsonPropertyName("humidity")]
+    public int HumidityPercentage { get; set; }
+    
+    [JsonPropertyName("cloud")]
+    public int CloudCoverPercentage { get; set; }
+    
+    [JsonPropertyName("feelslike_c")]
+    public double FeelsTempInCelsius { get; set; }
+    
+    [JsonPropertyName("feelslike_f")]
+    public double FeelsTempInFahrenheit { get; set; }
+    
+    [JsonPropertyName("vis_km")]
+    public double VisibilityInKilometers { get; set; }
+    
+    [JsonPropertyName("vis_miles")]
+    public double VisibilityInMiles { get; set; }
+    
+    [JsonPropertyName("uv")]
+    public double UvIndex { get; set; }
+    
+    [JsonPropertyName("gust_mph")]
+    public double GustInMilesPerHour { get; set; }
+    
+    [JsonPropertyName("gust_kph")]
+    public double GustInKilometersPerHour { get; set; }
+    
 }

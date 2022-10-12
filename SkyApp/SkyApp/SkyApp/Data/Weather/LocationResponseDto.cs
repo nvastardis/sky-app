@@ -5,12 +5,24 @@ namespace SkyApp.Data.Weather;
 
 public class LocationResponseDto
 {
-    public string name { get; set; }
-    public string region { get; set; }
-    public string country { get; set; }
-    public double lat { get; set; }
-    public double lon { get; set; }
-    public string tz_id { get; set; }
-    public int localtime_epoch { get; set; }
-    public string localtime { get; set; }
+    [JsonPropertyName("name")]
+    public string Name { get; set; }
+    
+    [JsonPropertyName("region")]
+    public string Region { get; set; }
+    
+    [JsonPropertyName("country")]
+    public string Country { get; set; }
+    
+    [JsonPropertyName("lat")]
+    public double Latitude { get; set; }
+    
+    [JsonPropertyName("lon")]
+    public double Longitude { get; set; }
+    
+    [JsonPropertyName("tz_id")]
+    public string TimeZoneName { get; set; }
+
+    [JsonPropertyName("localtime")]
+    public string LocalTime { get; set; }
 }

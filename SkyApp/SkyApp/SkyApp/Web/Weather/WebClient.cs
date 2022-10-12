@@ -5,6 +5,7 @@ using System.Globalization;
 using System.IO;
 using System.Net.Http;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using SkyApp.Data.GeoLocation;
 using SkyApp.Data.Weather;
@@ -27,30 +28,22 @@ public class WebClient:
     }
     
     
-    public async Task<WeatherApiResponse> GetWeather(string location = null)
+    public async Task<WeatherApiResponse> GetWeather(string location = null, CancellationToken cts = default)
     {
         
-        var queryParameters = await SetQueryParametersViaGeoLocator(location);
-        var result = new WeatherApiResponse();
+        var queryParameters = await SetQueryParametersViaGeoLocator(location, cts);
+        WeatherApiResponse result = new();
 
         if (queryParameters.locationStatus != GeoLocatorStatus.Success)
         {
             result.Weather = null;
-            switch (queryParameters.locationStatus)
+            result.Status = queryParameters.locationStatus switch
             {
-                case GeoLocatorStatus.PermissionException:
-                    result.Status = WeatherApiResponseStatus.ErrorFindingLocationPermission;
-                    break;
-                case GeoLocatorStatus.FeatureNotEnabledException:
-                    result.Status = WeatherApiResponseStatus.ErrorFindingLocationFeatureNotEnabled;
-                    break;
-                case GeoLocatorStatus.FeatureNotSupportedException:
-                    result.Status = WeatherApiResponseStatus.ErrorFindingLocationFeatureNotSupported;
-                    break;
-                default:
-                    result.Status = WeatherApiResponseStatus.Undefined;
-                    break;
-            }
+                GeoLocatorStatus.PermissionException => WeatherApiResponseStatus.ErrorFindingLocationPermission,
+                GeoLocatorStatus.FeatureNotEnabledException => WeatherApiResponseStatus.ErrorFindingLocationFeatureNotEnabled,
+                GeoLocatorStatus.FeatureNotSupportedException => WeatherApiResponseStatus.ErrorFindingLocationFeatureNotSupported,
+                _ => WeatherApiResponseStatus.Undefined
+            };
 
             return result;
 
@@ -61,24 +54,25 @@ public class WebClient:
             Method = HttpMethod.Get,
             RequestUri = new($"{_apiBaseUrl}{queryParameters.locationParameter}")
         };
-        using var response = await _client.SendAsync(request);
+        using var response = await _client.SendAsync(request, cts);
         response.EnsureSuccessStatusCode();
-        var body = await response.Content.ReadAsStringAsync();
-        var bodyStream = new MemoryStream(Encoding.UTF8.GetBytes(body));
-        result.Weather = await JsonSerializer.DeserializeAsync<WeatherDto>(bodyStream);
+        var body = await response.Content.ReadAsStreamAsync();
+        
+        result.Weather = await JsonSerializer.DeserializeAsync<WeatherDto>(body, JsonSerializerOptions.Default, cts);
         result.Status = WeatherApiResponseStatus.Success;
         return result;
     }
     
-    private async Task<(string locationParameter,  GeoLocatorStatus locationStatus)> SetQueryParametersViaGeoLocator(string location = null)
+    private async Task<(string locationParameter, GeoLocatorStatus locationStatus)> SetQueryParametersViaGeoLocator(
+        string location = null, CancellationToken cts = default)
     {
-        var query = "q=";
+        const string query = "q=";
         if (location is not null)
         {
             return ($"{query}{location}", GeoLocatorStatus.Success);
         }
         
-        var currentLocation = await _geoLocator.GetCurrentLocationAsync();
+        var currentLocation = await _geoLocator.GetCurrentLocationAsync(cts);
         if (currentLocation.LocationFound is null)
         {
             return (null, currentLocation.ResponseStatus);

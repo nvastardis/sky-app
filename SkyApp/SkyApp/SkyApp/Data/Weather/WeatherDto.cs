@@ -1,9 +1,13 @@
 using System;
+using System.Text.Json.Serialization;
 
 namespace SkyApp.Data.Weather;
 
 public class WeatherDto
 {
-    public LocationResponseDto location { get; set; }
-    public DetailedReportDto current { get; set; }
+    [JsonPropertyName("location")]
+    public LocationResponseDto CurrentLocation { get; set; }
+    
+    [JsonPropertyName("current")]
+    public DetailedReportDto WeatherReport { get; set; }
 }

@@ -8,14 +8,13 @@ namespace SkyApp.Data.GeoLocation;
 public class GeoLocator
     : IGeoLocator
 {
-    public async Task<GeoLocatorResponse> GetCurrentLocationAsync()
+    public async Task<GeoLocatorResponse> GetCurrentLocationAsync(CancellationToken cts = default)
     {
         GeoLocatorResponse response = new();
-        CancellationTokenSource cts = new();
         try
         {
             GeolocationRequest request = new(GeolocationAccuracy.Medium, TimeSpan.FromSeconds(10));
-            response.LocationFound = await Geolocation.GetLocationAsync(request, cts.Token);
+            response.LocationFound = await Geolocation.GetLocationAsync(request, cts);
             response.ResponseStatus = GeoLocatorStatus.Success;
         }
         catch (FeatureNotSupportedException)
