@@ -1,25 +1,30 @@
+using SkyApp.Data.Weather;
 using SkyApp.Web.Weather;
 using Xamarin.Forms;
+using Xamarin.Forms.Xaml;
 
-namespace SkyApp.Pages;
+namespace SkyApp;
 
-public class WeatherPage : ContentPage
+[XamlCompilation(XamlCompilationOptions.Compile)]
+public partial class WeatherPage : ContentPage
 {
+    public WeatherDto Info { get; set; } = null;
     private readonly IWeatherApi _weatherApi;
-
     public WeatherPage(IWeatherApi api)
     {
         _weatherApi = api;
-        InitAsync();
+        InitializeComponent();
+        GatherWeatherInfo();
     }
 
-    private async void InitAsync()
+    private async void GatherWeatherInfo()
     {
         var response = await _weatherApi.GetWeather();
         switch (response.Status)
         {
             case WeatherApiResponseStatus.Success:
-                await DisplayAlert("Success!", "Successful fetch for current Location", "OK");
+                /*await DisplayAlert("Success!", "Successful fetch for current Location", "OK");*/ 
+                Info = response.Weather;
                 break;
             case WeatherApiResponseStatus.ErrorFindingLocationPermission:
                 await DisplayAlert("Exception!", "Exception: No Permission for Location", "OK");
