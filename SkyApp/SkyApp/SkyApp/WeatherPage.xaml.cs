@@ -8,7 +8,24 @@ namespace SkyApp;
 [XamlCompilation(XamlCompilationOptions.Compile)]
 public partial class WeatherPage : ContentPage
 {
-    public WeatherDto Info { get; set; } = null;
+    public static BindableProperty WeatherInfo { get; set; } = BindableProperty.Create(
+        nameof(Info),
+    typeof(WeatherDto),
+    typeof(WeatherDto),
+    new WeatherDto(),
+        BindingMode.OneWay,
+        propertyChanged: (bindableObject, oldValue, newValue) =>
+        {
+            var view = bindableObject as WeatherPage; 
+            view!.Info = (WeatherDto)newValue;
+        });
+
+    public WeatherDto Info
+    {
+        get => (WeatherDto)GetValue(WeatherInfo);
+        set => SetValue(WeatherInfo, value);
+    }
+
     private readonly IWeatherApi _weatherApi;
     public WeatherPage(IWeatherApi api)
     {
@@ -19,6 +36,7 @@ public partial class WeatherPage : ContentPage
 
     private async void GatherWeatherInfo()
     {
+        
         var response = await _weatherApi.GetWeather();
         switch (response.Status)
         {
@@ -39,5 +57,8 @@ public partial class WeatherPage : ContentPage
                 await DisplayAlert("Exception!", "Exception: Undefined Exception was thrown", "OK");
                 break;
         }
+
+        DefaultActivityIndicator.IsRunning = false;
+        DetailsGrid.IsVisible = true;
     }
 }

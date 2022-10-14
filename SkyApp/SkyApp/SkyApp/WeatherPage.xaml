@@ -2,11 +2,26 @@
 
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             x:Class="SkyApp.WeatherPage">
+             x:Class="SkyApp.WeatherPage"
+             x:Name="WeatherDetailsPage">
     <ContentPage.Content>
-        <StackLayout Spacing="20" Padding="15">
-            <Label Text="Location" VerticalOptions="CenterAndExpand" HorizontalOptions="CenterAndExpand" />
-            <Label Text="{Binding Weather.Info}" VerticalOptions="CenterAndExpand" HorizontalOptions="CenterAndExpand" />
+
+        <StackLayout>
+            <ActivityIndicator x:Name="DefaultActivityIndicator" IsRunning="True"/>
+            <Grid x:Name="DetailsGrid"  VerticalOptions="Center" HorizontalOptions="Center" IsVisible="False">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="250" />
+                    <ColumnDefinition Width="150" />
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="2*" />
+                    <RowDefinition Height="*" />
+                </Grid.RowDefinitions>
+                <Label Grid.Row="0" Grid.Column="0" Text="Country" FontAttributes="Bold"/>
+                <Label Grid.Row="1" Grid.Column="0" Text="{Binding Info.CurrentLocation.Country, Source = {x:Reference WeatherDetailsPage}}"/>
+            </Grid>
         </StackLayout>
+
     </ContentPage.Content>
 </ContentPage>
